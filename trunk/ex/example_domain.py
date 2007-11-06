@@ -1,25 +1,23 @@
 #Note: This is an early example of what a domain might look like. Try not to take it too seriously
 
-from psox.utils import n2ln, s2ls, fb2n #num to longnum and string to longstring
+from psox.utils import n2ln, s2ls #num to longnum and string to longbytes
 from psox.safety import unsafe
 from psox.domain import Domain, argtypes, fnum
-from psox.types import STRING, LBYTES, LNUM, VARG
+from psox.types import STRING, LBYTES, LNUM, FNUM, VARG
 
 class MyDomain(Domain):
     
     @fnum(0x05) #[MANDATORY] This will make this function be bound to 0x05 in this domain
-    @argtypes(LNUM, LNUM, 3) #[MANDATORY] This specifies what arguments the function will take. Note that the 3 indicates fixed bytes. Fixed bytes are represented as a string
-    def add(self, num1, num2, str3):
+    @argtypes(LNUM, LNUM, FNUM(3)) #[MANDATORY] This specifies what arguments the function will take. Note that the FNUM(3) indicates fixed bytes acting as one number
+    def add(self, num1, num2, num3):
         """Add two longnums, resulting in a longnum"""
         return n2ln(num1+num2) #The return must be a string..
     
     
     @fnum(0x06)
     @unsafe #Note that this comes _directly_ after @fnum
-    @argtypes(1, 1)
-    def unsafe_add(self, str1, str2):
-        num1 = fb2n(str1)
-        num2 = fb2n(str2)
+    @argtypes(FNUM(1), FNUM(1))
+    def unsafe_add(self, num1, num2):
         return chr(num1+num2)
         
         
