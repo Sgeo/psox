@@ -8,7 +8,7 @@ LNUM
 LBYTES
 TDATA
 
-Physically, FNUM and FSTRING are identical, and LNUM and LSTRING are identical.
+Physically, FNUM and FSTRING are identical, and LNUM and LBYTES are identical.
 
 LNUM, LBYTES, and TDATA are best avoided when not needed.
 
@@ -31,7 +31,7 @@ TDATA:
     FBYTES: 01h
     STRING: 02h
     LNUM: 03h
-    LSTRING: 04h
+    LBYTES: 04h
     TDATA: 05h
     
     For FNUM and FBYTES, the next byte indicates how many bytes there are.
