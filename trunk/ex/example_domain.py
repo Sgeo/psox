@@ -3,7 +3,7 @@
 from psox.utils import n2ln, s2ls, fb2n #num to longnum and string to longstring
 from psox.safety import unsafe
 from psox.domain import Domain, argtypes, fnum
-from psox.types import STRING, LSTRING, LNUM
+from psox.types import STRING, LSTRING, LNUM, VARG
 
 class MyDomain(Domain):
     
@@ -21,3 +21,9 @@ class MyDomain(Domain):
         num1 = fb2n(str1)
         num2 = fb2n(str2)
         return chr(num1+num2)
+        
+        
+    @fnum(0x07)
+    @argtypes(VARG(LNUM)) #You can use VARG(sometype) only as the last type in argtypes. The caller, when it reaches that point, will specify the number of arguments it wishes to send. i.e. to add 5 longnums, this would be called with 0x05 0x07 0x05 ln1 ln2 ln3 ln4 ln5
+    def varadd(self, nums*):
+        return n2ln(sum(nums))
