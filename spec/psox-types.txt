@@ -1,0 +1,41 @@
+All arguments to functions must be a PSOX type. Functions may return whatever they like, however.
+
+There are 6 different PSOX types that a PSOX function may accept:
+FNUM
+FBYTES
+STRING
+LNUM
+LBYTES
+TDATA
+
+Physically, FNUM and FSTRING are identical, and LNUM and LSTRING are identical.
+
+LNUM, LBYTES, and TDATA are best avoided when not needed.
+
+FNUM:
+    Simply a fixed number of bytes that represent one number, e.g. 01h 00h would represent 256.
+FBYTES:
+    A fixed number of bytes that represent arbitrary bytes.
+STRING:
+    A simple null-terminated C-style string
+LNUM:
+    An arbitrary length integer.
+    The format goes like this: (indicator) (data) (indicator) (data) (indicator) etc. An indicator of 0x01 means that data follows. An indicator of 0x02 is only allowed at the beginning of the LNUM, and indicate that the number is negative. An indicator of 0x00 means that the LNUM is over.
+
+LBYTES:
+    An arbitrary number of bytes that may contain a NUL. The format is identical to LNUM, and an indicator of 0x02 is processed as 0x01 if it is the first indicator.
+    
+TDATA:
+    "Typed data." Can represent any type, including TDATA. The first byte is an indicator:
+    FNUM: 00h
+    FBYTES: 01h
+    STRING: 02h
+    LNUM: 03h
+    LSTRING: 04h
+    TDATA: 05h
+    
+    For FNUM and FBYTES, the next byte indicates how many bytes there are.
+    e.g. a TDATA representing the FBYTES 06h 07h would be: 
+    01h 02h 06h 07h
+    
+    For LNUM and LBYTES, the initial indicator for these two types is still required.
