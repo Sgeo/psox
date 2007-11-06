@@ -25,3 +25,6 @@ class MyDomain(Domain):
     @argtypes(VARG(LNUM)) #You can use VARG(sometype) only as the last type in argtypes. The caller, when it reaches that point, will specify the number of arguments it wishes to send. i.e. to add 5 longnums, this would be called with 0x05 0x07 0x05 ln1 ln2 ln3 ln4 ln5
     def varadd(self, nums*):
         return n2ln(sum(nums))
+        
+
+the_domain = MyDomain() #the_domain is MAGIC
