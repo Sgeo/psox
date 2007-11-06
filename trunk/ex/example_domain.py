@@ -3,7 +3,7 @@
 from psox.utils import n2ln, s2ls, fb2n #num to longnum and string to longstring
 from psox.safety import unsafe
 from psox.domain import Domain, argtypes, fnum
-from psox.types import STRING, LSTRING, LNUM, VARG
+from psox.types import STRING, LBYTES, LNUM, VARG
 
 class MyDomain(Domain):
     
