@@ -38,7 +38,7 @@ REGEX:
     
     
 Regexes:
-    All PSOX bytes are represented as regexes with ONE matching group. Here are the regexes for each type.
+    All PSOX types are represented as regexes with ONE matching group. Here are the regexes for each type.
     FNUM(n)/FBYTES(n):
         r"(.{n})"
     STRING:
