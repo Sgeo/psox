@@ -1,12 +1,13 @@
 All arguments to functions must be a PSOX type. Functions may return whatever they like, however.
 
-There are 6 different PSOX types that a PSOX function may accept:
+There are 7 different PSOX types that a PSOX function may accept:
 FNUM
 FBYTES
 STRING
 LNUM
 LBYTES
-TDATA
+VARG
+REGEX
 
 Physically, FNUM and FBYTES are identical, and LNUM and LBYTES are identical.
 
@@ -25,17 +26,29 @@ LNUM:
 LBYTES:
     An arbitrary number of bytes that may contain a NUL. The format is identical to LNUM, and an indicator of 0x02 is processed as 0x01 if it is the first indicator.
     
-TDATA:
-    "Typed data." Can represent any type, including TDATA. The first byte is an indicator:
-    FNUM: 00h
-    FBYTES: 01h
-    STRING: 02h
-    LNUM: 03h
-    LBYTES: 04h
-    TDATA: 05h
+VARG:
+    An arbitrary number of an arbitrary PSOX type. Physically, it is represented like an LNUM/LBYTES, except w/o the 0x02 indicator.
+    For example, a VARG(STRING) might look like:
+        0x01 "hello!" 0x01 "world!" 0x00
+        Where of course "hello!" and "world!" are STRINGs..
+        
+REGEX:
+    An arbitrary sequence of bytes that match a regex. The regex MUST have EXACTLY one matching group. An example is REGEX(r"(.{3})"), which incidentally is equivelent to FBYTES.
+    Note that in the reference implementation, REGEX is called with two arguments, the second being an interpreter that takes the matched string and returns an interpreted value
     
-    For FNUM and FBYTES, the next byte indicates how many bytes there are.
-    e.g. a TDATA representing the FBYTES 06h 07h would be: 
-    01h 02h 06h 07h
     
-    For LNUM and LBYTES, the initial indicator for these two types is still required.
+Regexes:
+    All PSOX bytes are represented as regexes with ONE matching group. Here are the regexes for each type.
+    FNUM(n)/FBYTES(n):
+        r"(.{n})"
+    STRING:
+        r"([^\x00]*?)\x00"
+    LONGNUM/LONGBYTES:
+        r"((?:\x02.)?(?:\x01.)*?\x00)"
+    VARG:
+        This varies depending on the type.. Construction (note that the () for matching groups within some_type_regex are modified to be non-retrievable w/ "?:"):
+        VARG(some_type_regex):
+            r"((?:\x01" + some_type_regex + r")*?\x00)"
+    
+    REGEX(some_regex):
+        some_regex
