@@ -11,25 +11,32 @@ This started due to concerns about the semantic meaning of 0x00 0x00
 and due to displeasure about the idea of PESOIX writing directly to
 an esolang's memory..
 
-This is version 0x00 0x00 r20070907 of PSOX..
+This is version 0x00 0x00 r20071229 of PSOX..
 
-Terminology: a PSOX client is an app written in a (presumably)
-esoteric language that takes advantage of PSOX features. A PSOX
-server is what provides those features, and can be implemented as
-either part of the client's interpreter, or as a layer between real
-stdin/stdout, and the interpreter (preferred). A domain takes the
-place of PESOIX's dialects, and represents what in other languages
+Terminology: 
+PSOX Client:
+    an app written in a (presumably) esoteric language that takes advantage of PSOX features.
+    
+PSOX Server:
+    Provides PSOX features and can be implemented as either part of the client's interpreter, or as a layer between real stdin/stdout and the interpreter (preferred).
+    
+Domain:
+    Takes place of PESOIX's dialects, and represents what in other languages
 might be called a library, e.g. File I/O or Direct sockets or HTTP.
-An even domain is a domain that is either built directly into the
+A builtin domain is a domain that is either built directly into the
 PSOX spec, or referred to from the PSOX spec as such. A custom
 domain does not need to be referred to by the PSOX spec. This
 allows people to make their own domains without worrying about
 registering anything, as in Funge-98
 
+PRI:
+    A PSOX Resource Identifier. Can either be a valid URI, or a string registered on http://esolangs.org/wiki/PSOX/PRI
+    Can never start with a number
+
+
 File descriptors:
 A file descriptor is a number between 0 and 255, inclusive. File descriptors let
-the app change the meaning of stdin and stdout. Note that safety features, for obvious
-reasons, still go through the normal stdin and stdout. Example:
+the app change the meaning of stdin and stdout. Example:
 0x00 0x02 0x10 f 0x0A is Change Stdout
 0x00 0x02 0x11 f 0x0A is Change Stdin
 If there is a file descriptor 0x01 I want to read input from:
@@ -40,47 +47,27 @@ stdin in the context of an infile descriptor
 
 New file descriptors are always opened on the smallest number available.
 
+When a file descriptor is created, it can be either an infile descriptor, outfile descriptor, or dualfile descriptor. In any case, it occupies one slot so this is possible:
 
-A function 0x$$ in domain 0x## is called with:
-0x00 0x## 0x$$ 0x0A
+0x00 (standard dualfile)
+0x01 (some infile)
+0x02 (some dualfile)
+0x03 (some outfile)
+
+
+A function f in domain d is called with:
+0x00 d f 0x0A
 
 Note that some functions might have extended names,
-e.g. 0x%% 0x&& in domain 0x## would be called with:
+e.g. f g in domain d would be called with:
 
-0x00 0x## 0x%% 0x&& 0x0A
+0x00 d f g 0x0A
 
 The domain defines which functions lead to extended
 functions like this.
 
-Longnums:
-Some numbers may be specified as longnums. A longnum is an
-arbitrary-size integer. A longnum is specified as a series of
-indicator bytes and data bytes. The indicator 0x01 means a data
-byte follows. The indicator 0x02 can only be used as the first
-indicator, and means that a data byte follows, and the number is
-negative. The indicator 0x00 means the end of the longnum. Example:
-
-0x1234 becomes:
-0x01(INDICATOR: BYTE FOLLOWS)
-0x12(DATA)
-0x01(INDICATOR: BYTE FOLLOWS)
-0x34(DATA)
-0x00(INDICATOR: END OF LONGNUM)
-Please note that this longnum format is used
-ONLY for transmission, and is not suitable for, e.g. a
-way to store large numbers on Brainf*ck tape..
-Also note that, when possible, it is preferred to use
-fixed-width numbers instead of longnums. In fact, there
-should ALWAYS be an alternative to sending the client a
-longnum. For example, a function that asks the user for a
-number should allow the client to state how many bytes the
-number can be, or 0 if the client is willing to accept a longnum.
-
-Longstrings:
-A longstring is a string that follows a similar format to longnums.
-It is indicator bytes spread through data, e.g.
-0x01 0x41 0x01 0x42 0x01 0x43 0x00 is "ABC"
-It is preferred to use longstrings only in cases where the string may contain NULs..
+Types:
+All functions that accept arguments can only accept them in the form of one of the PSOX types. The types are elaborated on at psox-types.txt
 
 PSOX-Init will be: 0x00 0x07 which is then followed by versioning
 information
@@ -117,7 +104,7 @@ instead of specifing a general API, they are more like a library.
 One domain might provide functions for printing numbers, and
 another might provide networking capability. All domains must
 either have a longname, or a shortname, or both. The long-name
-is similar to XML namespaces, so that people may, if they want,
+is a PRI, so that people may, if they want,
 use their own custom domain, as long as they can give it a
 unique longname. The shortname is a number. Even shortnames
 are for domains specified in this spec, or referred directly
