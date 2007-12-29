@@ -42,7 +42,7 @@ Regexes:
     FNUM(n)/FBYTES(n):
         r"(.{n})"
     STRING:
-        r"([^\x00]*?)\x00"
+        r"([^\x00]*?\x00)"
     LONGNUM/LONGBYTES:
         r"((?:\x02.)?(?:\x01.)*?\x00)"
     VARG:
