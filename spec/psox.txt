@@ -72,12 +72,12 @@ All functions that accept arguments can only accept them in the form of one of t
 PSOX-Init will be: 0x00 0x07 which is then followed by versioning
 information
 The client will send versioning information as follows:
-MAJOR_VER MIN_MINOR_VER MY_MINOR_VER
+MAJOR_VER 0x0A MIN_MINOR_VER MY_MINOR_VER 0x0A
 MAJOR_VER must be the same on both the client and server, although
 server may implement multiple major versions. MIN_MINOR_VER is the
 minimum minor version that the client will run on, and
 MY_MINOR_VER is the client's actual minor version
-The server first responds right after the MAJOR_VER is sent from
+The server first responds right after the 0x0A after the MAJOR_VER is sent from
 the client:
 
 0x00 - SUCCESS
