@@ -161,17 +161,16 @@ Commands in the PSOX-System domain:
     Domain installation check: Check that domain ## is installed.
     Returns the same way the versioning for PSOX returned.
 0x00 0x02 0x03 0x## somestring 0x0A
-    Attempt to map somestring to domain ##. Only for odd ##..
+    Attempt to map somestring to domain ##. Only for odd ## > 1..
 0x00 0x02 0x04 0x0A
     Retrieve NUL-terminated string with the effective command
-    line (PSOX server excludes itself from the string)
-0x00 0x02 0x06 d f 0x00 0x0A
-    Predeclare Unsafe Functionality (explained later)
+    line (PSOX server excludes itself from the string. In the PSOX.py implementation, specified on the commandline with `-c "whatever"`)
+0x00 0x02 0x06 somestring  0x0A
+    Determine if the safety option somestring was specified at the prompt. In the PSOX.py implementation, safety options are specified after an "-s" option, and are separated by commas e.g. "PSOX.py -s fullfileio,nohttp"
 0x00 0x02 0x08 0x0A
     Returns NUL-terminated string with the server's
     Handprint. This concept is stolen from Funge-98,
-    and identifies the server in the same way that a
-    longname identifies a custom domain.
+    and identifies the server with a PRI.
     
 File descriptor manipulation (in PSOX System Domain):
     
