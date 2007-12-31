@@ -157,9 +157,9 @@ Commands in the PSOX-System domain:
 
 0x00 0x02 0x01 0x## 0x0A
     Exit with status code ##
-0x00 0x02 0x02 0x## 0xMIN_MINOR 0xMY_MINOR 0x0A
+0x00 0x02 0x02 0x## 0x0A
     Domain installation check: Check that domain ## is installed.
-    Returns the same way the versioning for PSOX returned.
+    Returns the version of the domain if it is installed, or 0 otherwise. Note that no domain can have a version number 0.
 0x00 0x02 0x03 0x## somestring 0x0A
     Attempt to map somestring to domain ##. Only for odd ## > 1..
 0x00 0x02 0x04 0x0A
