@@ -7,7 +7,7 @@ def argtypes(*args):
 def rettypes(*types):
     def f(func):
         def g(*args, **kwargs):
-            returned = f(*args, **kwargs)
+            returned = func(*args, **kwargs)
             if(type(returned)!=tuple):
                 returned = (returned,)
             assert len(types)==len(returned)
