@@ -58,13 +58,6 @@ When a file descriptor is created, it can be either an infile descriptor, outfil
 A function f in domain d is called with:
 0x00 d f 0x0A
 
-Note that some functions might have extended names,
-e.g. f g in domain d would be called with:
-
-0x00 d f g 0x0A
-
-The domain defines which functions lead to extended
-functions like this.
 
 Types:
 All functions that accept arguments can only accept them in the form of one of the PSOX types. The types are elaborated on at psox-types.txt
