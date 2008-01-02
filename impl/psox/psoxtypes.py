@@ -1,8 +1,6 @@
 from utils import pack, unpack
 import re
 class PSOXType(object):
-    def __init__(self):
-        pass
         
     def totype(self, stuff):
         raise NotImplementedError
