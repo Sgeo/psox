@@ -1,16 +1,20 @@
-from functools import wraps #Note: Python 2.5
+#from functools import wraps #Note: Python 2.5
 
-def argtypes(*args):
+def argtypes(*types):
     def f(func):
-        func.regex = ''.join(i.regex for i in args)
-        return func
+        #@wraps
+        def g(self, *args, **kwargs):
+            processed_args = tuple(i.fromtype(j) for (i,j) in zip(types, args))
+            return func(self, *processed_args, **kwargs)
+        g.regex = ''.join(i.regex for i in types)
+        return g
     return f
 
 def rettypes(*types):
     def f(func):
-        @wraps #Needed to keep __name__ sane
-        def g(*args, **kwargs):
-            returned = func(*args, **kwargs)
+        #@wraps #Needed to keep __name__ sane
+        def g(self, *args, **kwargs):
+            returned = func(self, *args, **kwargs)
             if(type(returned)!=tuple):
                 returned = (returned,)
             assert len(types)==len(returned)
@@ -21,9 +25,11 @@ def rettypes(*types):
 class Domain(object):
     def __init__(self):
         self.f_dict = {}
-        funcs = [i for i in self.__class__.__dict__ if i.__name__[0]=="f" and len(i.__name__)==3]
-        for i in funcs:
-            self.f_dict[chr(int(i.__name__[1:], 16))] = i
+        funcs = [(k, v) for (k, v) in self.__class__.__dict__.items() if k[0]=="f" and len(k)==3]
+        for k, v in funcs:
+            def f(*args, **kwargs):
+                return v(self, *args, **kwargs)
+            self.f_dict[chr(int(k[1:], 16))] = f
             
     def __getitem__(self, key):
         """Remember, the key is a char, not a num"""
