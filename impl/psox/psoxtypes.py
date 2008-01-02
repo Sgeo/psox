@@ -70,7 +70,10 @@ class LNUM(PSOXType):
         return result
         
     def fromtype(self, stuff):
-        return unpack(stuff[1:-1:2])
+        result = unpack(stuff[1:-1:2])
+        if(stuff[0]=="\x02"):
+            result *= -1
+        return result
         
 LNUM = LNUM()
 
