@@ -66,7 +66,7 @@ class LNUM(PSOXType):
             header = "\x01"
         else:
             header = "\x02"
-        result = header + result + "\x00
+        result = header + result + "\x00"
         return result
         
     def fromtype(self, stuff):
