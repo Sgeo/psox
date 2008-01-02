@@ -22,3 +22,27 @@ def vn2vs(major, minor1, minor2 = None):
         minor1 = str(minor1[0]) + "-" + str(minor1[1])
     return str(major) + "." + str(minor1) + append
     
+def bin(num):
+    """Stolen from bz2 of Sine"""
+    b=""
+    while num > 0:
+        b = str(num%2) + b
+        num = num/2
+    return b
+    
+def pack(num):
+    """Much thanks to KirkMcDonald of #python"""
+    parts = []
+    while num:
+        parts.append(num & 0xFF)
+        num >>= 8
+    return ''.join(chr(i) for i in reversed(parts))
+
+def unpack(data):
+    result = 0
+    while data:
+        result <<= 8
+        result += ord(data[0])
+        data = data[1:]
+    return result
+    

@@ -29,4 +29,6 @@ Math:
     Multiplies the single-byte value a with the single-byte value b, resulting in a single byte
 0x00 0x04 0x0C a b 0x0A
     Multiplies the longnum a and the longnum b, returning a longnum
+0x00 0x04 0x0D FNUM(1)/a FNUM(1)/b 0x0A
+    Divides 
 

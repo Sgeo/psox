@@ -1,5 +1,10 @@
+from psox import psoxglobals as G
+
 PSOX_MAJOR_VER = 0
 PSOX_MINOR_VER_RANGE = (0, 0)
+
+G.PSOX_MAJOR_VER = PSOX_MAJOR_VER
+G.PSOX_MINOR_VER_RANGE = PSOX_MINOR_VER_RANGE
 
 assert PSOX_MINOR_VER_RANGE[0] <= PSOX_MINOR_VER_RANGE[1]
 
@@ -15,13 +20,18 @@ parser.add_option("-c", "--command-line", dest="cline", help="Specifies the virt
 
 options, args = parser.parse_args()
 
+G.SAFETYLIST = options.safety.split(",")
+
 client = Popen(args, stdin=PIPE, stdout=PIPE)
 
 getline = client.stdout.readline
 
 def send(msg):
-    client.stdin.write(msg)
-    client.stdin.flush()
+    try:
+        client.stdin.write(msg)
+        client.stdin.flush()
+    except IOError:
+        sys.exit(0)
 
 curline = getlines(getline, linelen, 4)
 if(curline[0:2]!="\x00\x07"):
@@ -42,5 +52,9 @@ if(cli_min_ver > PSOX_MINOR_VER_RANGE[1]):
     raise UnsupportedVersionError("PSOX " + vn2vs(PSOX_MAJOR_VER, cli_min_ver) + " not supported yet.")
 
 cliver = min(cli_max_ver, PSOX_MINOR_VER_RANGE[1])
+G.CLIVER = cliver
 
 print "Running PSOX " + vn2vs(PSOX_MAJOR_VER, cliver)
+
+
+send("\x00" + chr(cliver))
