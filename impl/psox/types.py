@@ -1,4 +1,5 @@
 from utils import pack, unpack
+import re
 class PSOXType(object):
     def __init__(self):
         pass
@@ -35,6 +36,7 @@ class FBYTES(PSOXType):
         self.regex = r"(.{" + str(size) + r"})"
     
     def totype(self, stuff):
+        stuff = str(stuff)
         assert len(stuff) <= self.size
         return "\x00" * (self.size - len(stuff)) + stuff
     
@@ -83,4 +85,30 @@ class LBYTES(PSOXType):
         
     def fromtype(self, stuff):
         return stuff[1:-1:2]
+        
+LBYTES = LBYTES()
+
+class VARG(PSOXType):
+    
+    def __init__(self, a_type):
+        self.the_type = a_type
+        self.regex = r"((?:\x01(?:" + a_type.regex[1:-1] + r"))*?\x00)" #Note that the regexes of all types have () on both sides
+        fromtype_regex = r"(?:\x01" + a_type.regex + r")*?\x00"
+        self.comp_regex = re.compile(self.fromtype_regex, re.S)
+        
+    def totype(self, stuff):
+        if((not hasattr(stuff, "__iter__")) or isinstance(stuff, basestring)):
+            stuff = (stuff,)
+        return "\x01" + "\x01".join(self.the_type.totype(i) for i in stuff) + "\x00"
+        
+    def fromtype(self, stuff):
+        return self.comp_regex.match(stuff).groups()
+        
+class REGEX(PSOXType):
+    def __init__(self, a_regex, totype=None, fromtype=None):
+        self.regex = a_regex
+        if totype is not None:
+            self.totype = totype
+        if fromtype is not None:
+            self.fromtype = fromtype
         
