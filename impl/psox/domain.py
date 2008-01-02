@@ -15,6 +15,13 @@ def rettypes(*types):
         return g
     return f
 
-#class Domain(object):
-#    def __init__(self):
-        
+class Domain(object):
+    def __init__(self):
+        self.f_dict = {}
+        funcs = [i for i in self.__class__.__dict__ if i.__name__[0]=="f" and len(i.__name__)==3]
+        for i in funcs:
+            self.f_dict[chr(int(i.__name__[1:], 16))] = i
+            
+    def __getitem__(self, key):
+        """Remember, the key is a char, not a num"""
+        return self.f_dict[key]
