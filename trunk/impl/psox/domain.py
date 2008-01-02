@@ -15,6 +15,6 @@ def rettypes(*types):
         return g
     return f
 
-class Domain(object):
-    def __init__(self):
+#class Domain(object):
+#    def __init__(self):
         
