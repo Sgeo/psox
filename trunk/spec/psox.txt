@@ -194,9 +194,13 @@ File descriptor manipulation (in PSOX System Domain):
 0x00 0x02 0x17 0x0A
     Flush the current infile descriptor
 0x00 0x02 0x18 0x0A
-    Close the current outfile descriptor and return to stdout. Closing stdout is undefined.
+    Close the current outfile descriptor.
 0x00 0x02 0x19 0x0A
-    Close the current infile descriptor and return to stdin. Closing stdin is undefined.
+    Close the current infile descriptor.
+0x00 0x02 0x1A 0x0A
+    Close and delete current outfile descriptor and any associated infile descriptor, and make stdout the current outfile descriptor.
+0x00 0x02 0x1B 0x0A
+    Close and delete current infile descriptor and any associated outfile descriptor, and make stdin the current infile descriptor.
     
 
 List of Builtin Domains
