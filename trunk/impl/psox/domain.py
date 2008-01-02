@@ -1,4 +1,4 @@
-#from functools import wraps #Note: Python 2.5
+from functools import wraps #Note: Python 2.5
 
 def argtypes(*types):
     def f(func):
@@ -27,11 +27,10 @@ class Domain(object):
         self.f_dict = {}
         funcs = [(k, v) for (k, v) in self.__class__.__dict__.items() if k[0]=="f" and len(k)==3]
         for k, v in funcs:
-            def f(*args, **kwargs):
-                return v(self, *args, **kwargs)
-            f.regex = v.regex
-            self.f_dict[chr(int(k[1:], 16))] = f
+            self.f_dict[chr(int(k[1:], 16))] = v
+            
             
     def __getitem__(self, key):
         """Remember, the key is a char, not a num"""
         return self.f_dict[key]
+
