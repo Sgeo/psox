@@ -29,6 +29,7 @@ class Domain(object):
         for k, v in funcs:
             def f(*args, **kwargs):
                 return v(self, *args, **kwargs)
+            f.regex = v.regex
             self.f_dict[chr(int(k[1:], 16))] = f
             
     def __getitem__(self, key):
