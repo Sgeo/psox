@@ -1,3 +1,5 @@
+from functools import wraps #Note: Python 2.5
+
 def argtypes(*args):
     def f(func):
         func.regex = ''.join(i.regex for i in args)
@@ -6,6 +8,7 @@ def argtypes(*args):
 
 def rettypes(*types):
     def f(func):
+        @wraps #Needed to keep __name__ sane
         def g(*args, **kwargs):
             returned = func(*args, **kwargs)
             if(type(returned)!=tuple):
