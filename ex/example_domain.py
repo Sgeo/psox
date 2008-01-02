@@ -18,7 +18,7 @@ class MyDomain(Domain):
     @rettypes(LNUM) #[OPTIONAL] Converts the returned Python values into something accepted by PSOX
     def f05(self, num1, num2, num3): #Note that the name of the function specifies the function number. Hex digits are capitalized
         """Add two longnums, resulting in a longnum"""
-        return num1+num2 #The return must be a string..
+        return num1+num2 #The return must be a string, but @rettypes takes care of that for us
     
     if("no06" not in SAFETYLIST): #How to check for safety stuff
         @argtypes(FNUM(1), FNUM(1))
