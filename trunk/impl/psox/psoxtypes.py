@@ -93,8 +93,8 @@ class VARG(PSOXType):
     def __init__(self, a_type):
         self.the_type = a_type
         self.regex = r"((?:\x01(?:" + a_type.regex[1:-1] + r"))*?\x00)" #Note that the regexes of all types have () on both sides
-        fromtype_regex = r"(?:\x01" + a_type.regex + r")*?\x00"
-        self.comp_regex = re.compile(self.fromtype_regex, re.S)
+        fromtype_regex = r"\x01" + a_type.regex
+        self.comp_regex = re.compile(fromtype_regex, re.S)
         
     def totype(self, stuff):
         if((not hasattr(stuff, "__iter__")) or isinstance(stuff, basestring)):
@@ -102,7 +102,7 @@ class VARG(PSOXType):
         return "\x01" + "\x01".join(self.the_type.totype(i) for i in stuff) + "\x00"
         
     def fromtype(self, stuff):
-        return self.comp_regex.match(stuff).groups()
+        return tuple(self.the_type.fromtype(i) for i in self.comp_regex.findall(stuff))
         
 class REGEX(PSOXType):
     def __init__(self, a_regex, totype=None, fromtype=None):
