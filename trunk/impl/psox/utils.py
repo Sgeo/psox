@@ -1,6 +1,5 @@
-def getlines(getline, func, *args, **kwargs):
+def getlinesuntil(the_line, getline, func, *args, **kwargs):
     """repeatedly calls getline() until the concatination of getline() makes func(the_concat, *args, **kwargs) True."""
-    the_line = ""
     while(not (func(the_line, *args, **kwargs))):
         the_line += getline()
     return the_line
@@ -11,6 +10,12 @@ def linelen(string, length):
     elif(len(string) > length):
         from psox.errors import IllegalPSOXError
         raise IllegalPSOXError
+    return True
+    
+    
+def linelen_atleast(string, length):
+    if(len(string) < length):
+        return False
     return True
     
 def vn2vs(major, minor1, minor2 = None):
