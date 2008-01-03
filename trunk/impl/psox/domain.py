@@ -1,4 +1,4 @@
-from functools import wraps #Note: Python 2.5
+#from functools import wraps #Note: Python 2.5
 
 def argtypes(*types):
     def f(func):
@@ -31,6 +31,6 @@ class Domain(object):
             
             
     def __getitem__(self, key):
-        """Remember, the key is a char, not a num"""
+        """Remember, the key is a char, not a num. Also, you need to pass the domain itself into the function manually :("""
         return self.f_dict[key]
 
