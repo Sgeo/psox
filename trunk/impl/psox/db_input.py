@@ -23,7 +23,7 @@ class InputDomain(Domain):
                 padding = ""
             result = eof_status + non_eof_chars + the_data + padding
         else: #We're reading in a full line
-            if(the_data[-1]!="\n"):
+            if(len(the_data)==0 or the_data[-1]!="\n"):
                 eof_status = "\x00" #EOF
                 the_data += "\n" #Complimentary newline
             else:
