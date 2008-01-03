@@ -19,7 +19,7 @@ class InputDomain(Domain):
                 padding = "\x00" * (num - len(the_data))
             else:
                 eof_status = "\x01" #No EOF
-                non_eof_chars = num
+                non_eof_chars = chr(len(the_data))
                 padding = ""
             result = eof_status + non_eof_chars + the_data + padding
         else: #We're reading in a full line
