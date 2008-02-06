@@ -49,11 +49,12 @@ New file descriptors are always opened on the smallest number available.
 
 When a file descriptor is created, it can be either an infile descriptor, outfile descriptor, or dualfile descriptor. In any case, it occupies one slot so this is possible:
 
-0x00 (current file descriptor)
-0x01 (standard dualfile)
-0x02 (some infile)
-0x03 (some dualfile)
-0x04 (some outfile)
+0x00 (current outfile descriptor)
+0x01 (current infile descriptor)
+0x02 (standard dualfile)
+0x03 (some infile)
+0x04 (some dualfile)
+0x045 (some outfile)
 
 
 A function f in domain d is called with:
