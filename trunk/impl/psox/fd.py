@@ -1,6 +1,8 @@
 class FdDict(dict):
     def append(self, thing):
-        self[sorted(list(set(range(0,256)) - set(self.keys())))[0]] = thing
+        self[sorted(list(set(range(2,256)) - set(self.keys())))[0]] = thing
+        
+#The duplication in the below code is historical. There is no difference between out_ and in_, with the notable and critical exception of STDFD, which is why this code is remaining the same
         
 class PSOXFd(object):
     def out_absseek(self, num):
