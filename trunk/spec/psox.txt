@@ -35,24 +35,25 @@ PRI:
 
 
 File descriptors:
-A file descriptor is a number between 0 and 255, inclusive. File descriptors let
+A file descriptor is a number between 1 and 255, inclusive. File descriptors let
 the app change the meaning of stdin and stdout. Example:
 0x00 0x02 0x10 f 0x0A is Change Stdout
 0x00 0x02 0x11 f 0x0A is Change Stdin
-If there is a file descriptor 0x01 I want to read input from:
-0x00 0x02 0x11 0x01 0x0A
-from there, future input requests or whatever will read from descriptor 0x01
-0x00 is normal stdout in the context of an outfile descriptor, and normal
-stdin in the context of an infile descriptor
+If there is a file descriptor 0x03 I want to read input from:
+0x00 0x02 0x11 0x03 0x0A
+from there, future input requests or whatever will read from descriptor 0x03
+0x02 is normal stdout in the context of an outfile descriptor, and normal
+stdin in the context of an infile descriptor. 0x00 refers to the current outfile descriptor, and 0x01 refers to the current infile descriptor.
 
 New file descriptors are always opened on the smallest number available.
 
 When a file descriptor is created, it can be either an infile descriptor, outfile descriptor, or dualfile descriptor. In any case, it occupies one slot so this is possible:
 
-0x00 (standard dualfile)
-0x01 (some infile)
-0x02 (some dualfile)
-0x03 (some outfile)
+0x00 (current file descriptor)
+0x01 (standard dualfile)
+0x02 (some infile)
+0x03 (some dualfile)
+0x04 (some outfile)
 
 
 A function f in domain d is called with:
@@ -167,40 +168,26 @@ Commands in the PSOX-System domain:
     
 File descriptor manipulation (in PSOX System Domain):
     
-0x00 0x02 0x10 n 0x0A
-    Switch outfile descriptor to file descriptor n. Undefined if n is not 
+0x00 0x02 0x10 f 0x0A
+    Switch outfile descriptor to file descriptor f. Undefined if f is not 
     a valid outfile descriptor.
-0x00 0x02 0x11 n 0x0A
-    Switch infile descriptor to file descriptor n. Undefined if n is not
+0x00 0x02 0x11 f 0x0A
+    Switch infile descriptor to file descriptor f. Undefined if f is not
     a valid infile descriptor.
-0x00 0x02 0x12 L 0x0A
-    Absolute seek through the current outfile descriptor to location L,
+0x00 0x02 0x12 f L 0x0A
+    Absolute seek through file descriptor f to location L,
     where L is a longnum. Numbering starts at 0, and causes the NEXT 
-    written character to be at the saught-to position.
+    written or read-from character to be at the saught-to position.
     Negative numbers are considered to be the length of the file (if applicable) + 
     the number.
-0x00 0x02 0x13 L 0x0A
-    Absolute seek through the current infile descriptor to location L,
-    where L is a longnum. Numbering starts at 0, and causes the NEXT 
-    read-from character to be from the saught position.
-    Negative numbers are considered to be the length of the file (if applicable) + 
-    the number.
-0x00 0x02 0x14 L 0x0A
-    Relative seek through the current outfile descriptor by L.
-0x00 0x02 0x15 L 0x0A
-    Relative seek through the current infile descriptor by L.
+0x00 0x02 0x13 f L 0x0A
+    Relative seek through file descriptor f by L.
+0x00 0x02 0x14 f 0x0A
+    Flush file descriptor f.
+0x00 0x02 0x15 f 0x0A
+    Close file descriptor f.
 0x00 0x02 0x16 0x0A
-    Flush the current outfile descriptor
-0x00 0x02 0x17 0x0A
-    Flush the current infile descriptor
-0x00 0x02 0x18 0x0A
-    Close the current outfile descriptor.
-0x00 0x02 0x19 0x0A
-    Close the current infile descriptor.
-0x00 0x02 0x1A 0x0A
-    Close and delete current outfile descriptor and any associated infile descriptor, and make stdout the current outfile descriptor.
-0x00 0x02 0x1B 0x0A
-    Close and delete current infile descriptor and any associated outfile descriptor, and make stdin the current infile descriptor.
+    Close and delete file descriptor f, and change either the current infile or outfile descriptors, or both, to 0x02 if necessary.
     
 
 List of Builtin Domains
