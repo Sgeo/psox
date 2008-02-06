@@ -35,7 +35,7 @@ PRI:
 
 
 File descriptors:
-A file descriptor is a number between 1 and 255, inclusive. File descriptors let
+A file descriptor is a number between 2 and 255, inclusive. File descriptors let
 the app change the meaning of stdin and stdout. Example:
 0x00 0x02 0x10 f 0x0A is Change Stdout
 0x00 0x02 0x11 f 0x0A is Change Stdin
