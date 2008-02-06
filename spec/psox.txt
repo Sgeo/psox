@@ -43,7 +43,7 @@ If there is a file descriptor 0x03 I want to read input from:
 0x00 0x02 0x11 0x03 0x0A
 from there, future input requests or whatever will read from descriptor 0x03
 0x02 is normal stdout in the context of an outfile descriptor, and normal
-stdin in the context of an infile descriptor. 0x00 refers to the current outfile descriptor, and 0x01 refers to the current infile descriptor.
+stdin in the context of an infile descriptor. 0x00 refers to the file descriptor serving as current outfile descriptor, and 0x01 refers to the file descriptor serving as current infile descriptor.
 
 New file descriptors are always opened on the smallest number available.
 
