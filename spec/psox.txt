@@ -39,22 +39,22 @@ A file descriptor is a number between 2 and 255, inclusive. File descriptors let
 the app change the meaning of stdin and stdout. Example:
 0x00 0x02 0x10 f 0x0A is Change Stdout
 0x00 0x02 0x11 f 0x0A is Change Stdin
-If there is a file descriptor 0x03 I want to read input from:
-0x00 0x02 0x11 0x03 0x0A
-from there, future input requests or whatever will read from descriptor 0x03
-0x02 is normal stdout in the context of an outfile descriptor, and normal
-stdin in the context of an infile descriptor. 0x00 refers to the file descriptor serving as current outfile descriptor, and 0x01 refers to the file descriptor serving as current infile descriptor.
+If there is a file descriptor 0x04 I want to read input from:
+0x00 0x02 0x11 0x04 0x0A
+from there, future input requests or whatever will read from descriptor 0x04
+0x02 is normal stdout, and 0x03 is normal stdin. 0x00 refers to the file descriptor serving as current outfile descriptor, and 0x01 refers to the file descriptor serving as current infile descriptor.
 
 New file descriptors are always opened on the smallest number available.
 
-When a file descriptor is created, it can be either an infile descriptor, outfile descriptor, or dualfile descriptor. In any case, it occupies one slot so this is possible:
+When a file descriptor is created, it can be either an infile descriptor, outfile descriptor, or dualfile descriptor Dualfile just means that you can both read from it and write to it. In any case, it occupies one slot so this is possible:
 
 0x00 (current outfile descriptor)
 0x01 (current infile descriptor)
-0x02 (standard dualfile)
-0x03 (some infile)
-0x04 (some dualfile)
-0x045 (some outfile)
+0x02 (standard output)
+0x03 (standard input)
+0x04 (some infile)
+0x05 (some dualfile)
+0x06 (some outfile)
 
 
 A function f in domain d is called with:
@@ -188,7 +188,7 @@ File descriptor manipulation (in PSOX System Domain):
 0x00 0x02 0x15 f 0x0A
     Close file descriptor f.
 0x00 0x02 0x16 0x0A
-    Close and delete file descriptor f, and change either the current infile or outfile descriptors, or both, to 0x02 if necessary.
+    Close and delete file descriptor f, and change either the current infile or outfile descriptors, or both, to stdio (0x02 for outfile, 0x03 for infile) if necessary.
     
 
 List of Builtin Domains
