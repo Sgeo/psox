@@ -1,5 +1,8 @@
 from domain import Domain, argtypes, rettypes
-from psoxglobals import cur_infile
+from psoxtypes import FNUM
+from psoxglobals import FDDICT
+
+cur_infile = FDDICT[1]
 
 PSOX_VERSION = (0, 0, 0)
 MY_VERSION = 1
@@ -8,9 +11,8 @@ class InputDomain(Domain):
     def __init__(self):
         pass
         
-    def __getitem__(self, item):
+    def __getitem__(self, num):
         """We're pretending that this is the real function, for now"""
-        num = ord(item)
         the_data = cur_infile.read(num)
         if(num):
             if(len(the_data)<num):
@@ -30,9 +32,9 @@ class InputDomain(Domain):
                 eof_status = "\x01"
             result = eof_status + the_data + "\x00"
         
+        @argtypes(FNUM(1))
         def f(self):
             return result
-        f.regex = r""
         return f
         
 the_domain = InputDomain
