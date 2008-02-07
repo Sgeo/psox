@@ -36,12 +36,12 @@ class FdWrapper(PSOXFd):
         self.filelike.close()
     
     def write(self, text):
-        self.outfile.write(text)
+        self.filelike.write(text)
     def read(self, bytes):
         if(not bytes):
-            return self.infile.readline()
+            return self.filelike.readline()
         else:
-            return self.infile.read(bytes)
+            return self.filelike.read(bytes)
       
       
 import sys
