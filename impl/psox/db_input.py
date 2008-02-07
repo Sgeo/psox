@@ -2,8 +2,6 @@ from domain import Domain, argtypes, rettypes
 from psoxtypes import FNUM
 from psoxglobals import FDDICT
 
-cur_infile = FDDICT[1]
-
 PSOX_VERSION = (0, 0, 0)
 MY_VERSION = 1
 
@@ -13,7 +11,7 @@ class InputDomain(Domain):
         
     def __getitem__(self, num):
         """We're pretending that this is the real function, for now"""
-        the_data = cur_infile.read(num)
+        the_data = FDDICT[1].read(num)
         if(num):
             if(len(the_data)<num):
                 eof_status = "\x00" #There was an EOF
