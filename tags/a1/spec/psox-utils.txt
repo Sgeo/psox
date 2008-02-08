@@ -1,0 +1,31 @@
+Version 0x00, designed to work with PSOX 0.0
+
+0x00 0x04 0x01 FNUM(1)/n 0x0A
+    Returns a STRING with n as a decimal 0-255
+0x00 0x04 0x02 LNUM/n 0x0A
+    Returns a STRING with n as a decimal.
+0x00 0x04 0x03 FNUM(1)/n 0x0A
+    Returns a STRING representing n as a hexidecimal 0x00-0xFF
+0x00 0x04 0x04 L 0x0A
+    Prints the longnum L as a hexadecimal list (e.g. 0x54 0x32)
+0x00 0x04 0x05 0x0A
+    Get a single-byte value from the user in decimal 0-255
+0x00 0x04 0x06 0x0A
+    Get a longnum value from the user in decimal
+    
+Math:
+0x00 0x04 0x07 a b 0x0A
+    Adds the single byte values a and b together, resulting in a single-byte answer and wrapping in the event of overflow
+0x00 0x04 0x08 a b 0x0A
+    Adds the longnums a and b together, resulting in a longnum
+0x00 0x04 0x09 a b 0x0A
+    Subtracts the single-byte values b from a (a-b), resulting in a single-byte response, and wrapping.
+0x00 0x04 0x0A a b 0x0A
+    Subtracts the longnum b from the longnum a, resulting in a longnum
+0x00 0x04 0x0B a b 0x0A
+    Multiplies the single-byte value a with the single-byte value b, resulting in a single byte
+0x00 0x04 0x0C a b 0x0A
+    Multiplies the longnum a and the longnum b, returning a longnum
+0x00 0x04 0x0D FNUM(1)/a FNUM(1)/b 0x0A
+    Divides 
+
