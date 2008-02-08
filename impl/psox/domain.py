@@ -1,10 +1,14 @@
 #from functools import wraps #Note: Python 2.5
 
+from psoxglobals import SEEINTERNAL
+
 def argtypes(*types):
     def f(func):
         #@wraps
         def g(self, *args, **kwargs):
+            if(SEEINTERNAL): print "@argtypes sees: " + repr(args)
             processed_args = tuple(i.fromtype(j) for (i,j) in zip(types, args))
+            if(SEEINTERNAL): print "@argtypes sent: " + repr(processed_args)
             return func(self, *processed_args, **kwargs)
         g.regex = ''.join(i.regex for i in types)
         return g
@@ -15,6 +19,8 @@ def rettypes(*types):
         #@wraps #Needed to keep __name__ sane
         def g(self, *args, **kwargs):
             returned = func(self, *args, **kwargs)
+            if(returned is None):
+                return ""
             if(type(returned)!=tuple):
                 returned = (returned,)
             assert len(types)==len(returned)

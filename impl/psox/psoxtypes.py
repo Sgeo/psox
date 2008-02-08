@@ -1,5 +1,6 @@
 from utils import pack, unpack
 import re
+import psoxglobals as G
 class PSOXType(object):
         
     def totype(self, stuff):
@@ -25,6 +26,9 @@ class FNUM(PSOXType):
         return result
         
     def fromtype(self, stuff):
+        if(G.SEEINTERNAL):
+            print "The type sees: " + repr(stuff)
+            print "Function sees: " + repr(unpack(stuff))
         return unpack(stuff)
         
         
@@ -39,6 +43,8 @@ class FBYTES(PSOXType):
         return "\x00" * (self.size - len(stuff)) + stuff
     
     def fromtype(self, stuff):
+        if(G.SEEINTERNAL):
+            print "Function sees: " + str(ord(stuff))
         return stuff
         
 
