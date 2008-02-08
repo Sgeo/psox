@@ -83,7 +83,7 @@ specified above. The server then responds:
 0x01 - SERVER_MINOR_VER < MIN_MINOR_VER
 0x02 - MY_MINOR_VER < LOWEST_SUPPORTED_MINOR_VER [on the Server]
 
-After that, the server responds with its minorver
+After that, the server responds with the minorver running (the highest minorver compatible with both server and client)
 
 Once this is done, the app can run normally.. To
 output 0x00, 0x00 0x00 0x00 must be used. `0x00 0x00 a` safely prints a.
