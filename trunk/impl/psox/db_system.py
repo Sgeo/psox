@@ -25,6 +25,18 @@ class SysDomain(Domain):
             return G.DOMDICT[domnum](0)
         else:
             return 0
+            
+    @argtypes(FNUM(1), STRING)
+    @rettypes(FNUM(1))
+    def f03(self, domnum, pri):
+        if pri not in G.CDOMDICT:
+            return 0
+        the_domain = __import__("psox."+G.CDOMDICT[pri])
+        the_domain = getattr(the_domain, G.CDOMDICT[pri]) #Because the __import__ returns the psox module
+        if(the_domain.MY_VERSION): #Filter out domains with myver 0
+            G.DOMDICT[domnum] = (the_domain.MY_VERSION, the_domain.the_domain())
+        return the_domain.MY_VERSION
+            
     
     @argtypes()
     @rettypes(STRING)

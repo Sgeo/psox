@@ -27,8 +27,9 @@ class FNUM(PSOXType):
         
     def fromtype(self, stuff):
         if(G.SEEINTERNAL):
-            print "The type sees: " + repr(stuff)
-            print "Function sees: " + repr(unpack(stuff))
+            #print "The type sees: " + repr(stuff)
+            #print "Function sees: " + repr(unpack(stuff))
+            pass
         return unpack(stuff)
         
         
@@ -44,7 +45,8 @@ class FBYTES(PSOXType):
     
     def fromtype(self, stuff):
         if(G.SEEINTERNAL):
-            print "Function sees: " + str(ord(stuff))
+            #print "Function sees: " + str(ord(stuff))
+            pass
         return stuff
         
 
@@ -101,6 +103,8 @@ class VARG(PSOXType):
         self.the_type = a_type
         self.regex = r"((?:\x01(?:" + a_type.regex[1:-1] + r"))*?\x00)" #Note that the regexes of all types have () on both sides
         fromtype_regex = r"\x01" + a_type.regex
+        #print repr(self.regex)
+        #print repr(fromtype_regex)
         self.comp_regex = re.compile(fromtype_regex, re.S)
         
     def totype(self, stuff):
@@ -109,6 +113,8 @@ class VARG(PSOXType):
         return "\x01" + "\x01".join(self.the_type.totype(i) for i in stuff) + "\x00"
         
     def fromtype(self, stuff):
+        #print repr(stuff)
+        #print self.comp_regex.findall(stuff)
         return tuple(self.the_type.fromtype(i) for i in self.comp_regex.findall(stuff))
         
 class REGEX(PSOXType):
