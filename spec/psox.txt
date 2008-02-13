@@ -157,6 +157,7 @@ Commands in the PSOX-System domain:
     Returns the version of the domain if it is installed, or 0 otherwise. Note that no domain can have a version number 0.
 0x00 0x02 0x03 0x## somestring 0x0A
     Attempt to map somestring to domain ##. Only for odd ## > 1..
+    returns 1 byte indicating the domain's version, or 0 if the PRI was not installed as a domain
 0x00 0x02 0x04 0x0A
     Retrieve NUL-terminated string with the effective command
     line (PSOX server excludes itself from the string. In the PSOX.py implementation, specified on the commandline with `-c "whatever"`)

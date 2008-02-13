@@ -7,5 +7,7 @@
 #8: db_http
 
 #You may modify the below section as domain READMEs tell you to.
-#[Custom]
-#exdom: dc_exampledomain
+#Please note that in the Custom section, the filename comes first, then the PRI
+#Opposite of the Builtin section
+[Custom]
+dc_exampledomain: exdom

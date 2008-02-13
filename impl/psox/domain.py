@@ -5,7 +5,7 @@ from psoxglobals import SEEINTERNAL
 def argtypes(*types):
     def f(func):
         #@wraps
-        def g(self, *args, **kwargs):
+        def g(self, args, **kwargs):
             if(SEEINTERNAL): print "@argtypes sees: " + repr(args)
             processed_args = tuple(i.fromtype(j) for (i,j) in zip(types, args))
             if(SEEINTERNAL): print "@argtypes sent: " + repr(processed_args)
@@ -19,6 +19,7 @@ def rettypes(*types):
         #@wraps #Needed to keep __name__ sane
         def g(self, *args, **kwargs):
             returned = func(self, *args, **kwargs)
+            if(SEEINTERNAL): print "Function returned: " + repr(returned)
             if(returned is None):
                 return ""
             if(type(returned)!=tuple):
