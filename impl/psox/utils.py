@@ -9,7 +9,7 @@ def linelen(string, length):
         return False
     elif(len(string) > length):
         from psox.errors import IllegalPSOXError
-        raise IllegalPSOXError
+        raise IllegalPSOXError("Expected length of " + str(length) + ", got length " + str(len(string)) + " with string " + repr(string))
     return True
     
     
