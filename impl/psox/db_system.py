@@ -1,5 +1,5 @@
 from domain import Domain, argtypes, rettypes
-from psoxtypes import STRING, LBYTES, LNUM, FNUM, VARG, FBYTES
+from psoxtypes import STRING, STRINGNL, LBYTES, LNUM, FNUM, VARG, FBYTES
 import psoxglobals as G
 
 MY_VERSION = 1
@@ -26,7 +26,7 @@ class SysDomain(Domain):
         else:
             return 0
             
-    @argtypes(FNUM(1), STRING)
+    @argtypes(FNUM(1), STRINGNL)
     @rettypes(FNUM(1))
     def f03(self, domnum, pri):
         if pri not in G.CDOMDICT:
@@ -43,7 +43,7 @@ class SysDomain(Domain):
     def f04(self):
         return G.CLINE
         
-    @argtypes(STRING)
+    @argtypes(STRINGNL)
     @rettypes(FNUM(1))
     def f06(self, somestring):
         return int(somestring in G.SAFETYLIST)

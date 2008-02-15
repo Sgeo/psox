@@ -16,7 +16,7 @@ receive(3)
 #Map the domain
 send("\x00\x02\x03") #0x00 0x02 0x03 (map custom domain)
 send("\x03") #0x03 (the domain number we want to use for this domain
-send("exdom\x00") #The PRI plus the mandatory NUL that ends STRINGs
+send("exdom") #The PRI, remember that STRINGNLs don't need NULs at the end
 send("\n") #Mandatory 0x0A after every function call
 receive(1) #Throw away the returned version number
 
