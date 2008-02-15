@@ -1,9 +1,10 @@
 All arguments to functions must be a PSOX type. Functions may return whatever they like, however.
 
-There are 7 different PSOX types that a PSOX function may accept:
+There are 8 different PSOX types that a PSOX function may accept:
 FNUM
 FBYTES
 STRING
+STRINGNL
 LNUM
 LBYTES
 VARG
@@ -19,6 +20,8 @@ FBYTES:
     A fixed number of bytes that represent arbitrary bytes.
 STRING:
     A simple null-terminated C-style string
+STRINGNL:
+    A string that contains no newlines. This is mostly useful as the last data item that a function will accept.
 LNUM:
     An arbitrary length integer.
     The format goes like this: (indicator) (data) (indicator) (data) (indicator) etc. An indicator of 0x01 means that data follows. An indicator of 0x02 is only allowed at the beginning of the LNUM, and indicate that the number is negative. An indicator of 0x00 means that the LNUM is over.

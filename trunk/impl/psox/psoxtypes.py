@@ -64,6 +64,15 @@ class STRING(PSOXType):
         
 STRING = STRING()
 
+class STRINGNL(PSOXType):
+    regex = r"([^\n]*)"
+        
+    def fromtype(self, stuff):
+        assert "\n" not in stuff
+        return stuff
+        
+STRINGNL = STRINGNL()
+
 class LNUM(PSOXType):
     regex = r"((?:\x02.)?(?:\x01.)*?\x00)"
     
