@@ -1,5 +1,5 @@
 from domain import Domain, argtypes, rettypes
-from psoxtypes import FNUM, FBYTES, STRING, LNUM, LBYTES
+from psoxtypes import FNUM, FBYTES, STRING, STRINGNL, LNUM, LBYTES
 
 PSOX_VERSION = (0, 0, 0)
 MY_VERSION = 1
@@ -105,4 +105,4 @@ class MyDomain(Domain):
     def f10(self, n1, n2):
         return n1 / n2
         
-
+the_domain = MyDomain
