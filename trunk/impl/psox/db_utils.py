@@ -49,75 +49,60 @@ class MyDomain(Domain):
     @rettypes(FNUM(1))
     def f05(self, byte):
         return (byte ^ 0xFF)
-        
+     
     @argtypes(FNUM(1), FNUM(1))
     @rettypes(FNUM(1))
     def f06(self, b1, b2):
-        return int(b1 and b2)
-        
+        return int(b1 & b2)
+       
     @argtypes(FNUM(1), FNUM(1))
     @rettypes(FNUM(1))
     def f07(self, b1, b2):
-        return int(b1 & b2)
-        
-    @argtypes(FNUM(1), FNUM(1))
-    @rettypes(FNUM(1))
-    def f08(self, b1, b2):
-        return int(b1 or b2)
-        
-    @argtypes(FNUM(1), FNUM(1))
-    @rettypes(FNUM(1))
-    def f09(self, b1, b2):
         return int(b1 | b2)
-        
-    @argtypes(FNUM(1), FNUM(1))
-    @rettypes(FNUM(1))
-    def f0A(self, b1, b2):
-        return int((b1 or b2) and not (b1 and b2))
     
     @argtypes(FNUM(1), FNUM(1))
     @rettypes(FNUM(1))
-    def f0B(self, b1, b2):
+    def f08(self, b1, b2):
         return int(b1 ^ b2)
         
     @argtypes(FNUM(1), FNUM(1))
     @rettypes(FNUM(1))
-    def f0C(self, n1, n2):
+    def f09(self, n1, n2):
         return n1 + n2
     
     @argtypes(LNUM, LNUM)
     @rettypes(LNUM)
-    def f0D(self, n1, n2):
+    def f0A(self, n1, n2):
         return n1 + n2
 
     @argtypes(FNUM(1), FNUM(1))
     @rettypes(FNUM(1))
+    def f0B(self, n1, n2):
+        return n1 - n2
+    
+    @argtypes(LNUM, LNUM)
+    @rettypes(LNUM)
+    def f0C(self, n1, n2):
+        return n1 - n2
+        
+    @argtypes(FNUM(1), FNUM(1))
+    @rettypes(FNUM(1))
+    def f0D(self, n1, n2):
+        return n1 * n2
+    
+    @argtypes(LNUM, LNUM)
+    @rettypes(LNUM)
     def f0E(self, n1, n2):
-        return n1 - n2
-    
-    @argtypes(LNUM, LNUM)
-    @rettypes(LNUM)
+        return n1 * n2
+        
+    @argtypes(FNUM(1), FNUM(1))
+    @rettypes(FNUM(1))
     def f0F(self, n1, n2):
-        return n1 - n2
-        
-    @argtypes(FNUM(1), FNUM(1))
-    @rettypes(FNUM(1))
-    def f10(self, n1, n2):
-        return n1 * n2
-    
-    @argtypes(LNUM, LNUM)
-    @rettypes(LNUM)
-    def f11(self, n1, n2):
-        return n1 * n2
-        
-    @argtypes(FNUM(1), FNUM(1))
-    @rettypes(FNUM(1))
-    def f12(self, n1, n2):
         return n1 / n2
     
     @argtypes(LNUM, LNUM)
     @rettypes(LNUM)
-    def f13(self, n1, n2):
+    def f10(self, n1, n2):
         return n1 / n2
         
 
