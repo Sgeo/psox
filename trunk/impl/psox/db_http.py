@@ -4,6 +4,8 @@ import psoxglobals as G
 from fd import FdWrapper
 import urllib2 as url
 
+MY_VERSION = 1
+
 class HTTPDomain(Domain):
     
     @argtypes(STRINGNL)
