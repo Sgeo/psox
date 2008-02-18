@@ -51,7 +51,7 @@ class SysDomain(Domain):
     @argtypes()
     @rettypes(STRING)
     def f08(self):
-        return "PSOX.py"
+        return "pri:PSOX.py"
         
     @argtypes(FNUM(1))
     @rettypes()
