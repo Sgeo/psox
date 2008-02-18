@@ -15,10 +15,10 @@ class MyDomain(Domain):
         """Add two longnums, resulting in a longnum"""
         return num1+num2 #The return must be a string, but @rettypes takes care of that for us
     
-    if("no06" not in SAFETYLIST): #How to check for safety stuff
-        @argtypes(FNUM(1), FNUM(1))
-        def f06(self, num1, num2):
-            return chr(num1+num2) #Not bothering to use @rettypes here, returning a sheer string
+    # this used to be a demo for safety stuff
+    @argtypes(FNUM(1), FNUM(1))
+    def f06(self, num1, num2):
+        return chr(num1+num2) #Not bothering to use @rettypes here, returning a sheer string
         
         
     @argtypes(VARG(LNUM)) #This will cause a tuple to be passed in
