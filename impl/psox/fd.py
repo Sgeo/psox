@@ -2,7 +2,7 @@ import psoxglobals as G
 
 class FdDict(dict):
     def append(self, thing):
-        self[sorted(list(set(range(2,256)) - set(self.keys())))[0]] = thing
+        self[sorted(list(set(range(0,256)) - set(self.keys())))[0]] = thing
         
         
 class PSOXFd(object):
