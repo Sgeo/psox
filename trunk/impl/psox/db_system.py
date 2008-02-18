@@ -43,10 +43,10 @@ class SysDomain(Domain):
     def f04(self):
         return G.CLINE
         
-    @argtypes(STRINGNL)
-    @rettypes(FNUM(1))
-    def f06(self, somestring):
-        return int(somestring in G.SAFETYLIST)
+#    @argtypes(STRINGNL)
+#    @rettypes(FNUM(1))
+#    def f06(self, somestring):
+#        return int(somestring in G.SAFETYLIST)
         
     @argtypes()
     @rettypes(STRING)
