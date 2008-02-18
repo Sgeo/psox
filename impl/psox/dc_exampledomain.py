@@ -3,7 +3,6 @@
 
 from domain import Domain, argtypes, rettypes
 from psoxtypes import STRING, LBYTES, LNUM, FNUM, VARG
-from psoxglobals import SAFETYLIST
 
 PSOX_VERSION = (0, 0, 0) #First number specifies major version, next two specify minimum minor version, and current minor version
 
