@@ -4,9 +4,9 @@
     Type is 0x00 for TCP, 0x01 for UDP
     Port and addr should be obvious
     
-0x00 0x08 0x01 FNUM(1)/type FNUM(2)/port STRINGNL/addr 0x0A
+0x00 0x08 0x01 FNUM(1)/backlog FNUM(1)/type FNUM(2)/port STRINGNL/addr 0x0A
     Returns: Nothing
-    Makes a server socket. Server sockets start at 0x00 and are added at the lowest available number. Closing a server socket relinquishes that number and the other sockets in the stay at the same point.
+    Makes a server socket. Server sockets start at 0x00 and are added at the lowest available number. Closing a server socket relinquishes that number and the other sockets stay at the same point. Backlog specifies how many connections can be queued up. Should be at least 1 and the maximum might be ~5. Addr may be blank(omitted) to bind to the localhost.
     
 0x00 0x08 0x02 FNUM(1)/serversocket 0x0A
     Returns: Nothing
@@ -15,3 +15,11 @@
 0x00 0x08 0x03 FNUM(1)/serversocket 0x0A
     Returns: Nothing
     Closes serversocket
+    
+0x00 0x08 0x04 STRINGNL/url 0x0A
+    Returns: Nothing
+    Creates an FD with the data returned from getting the URL
+    
+0x00 0x08 0x05 STRING/url STRINGNL/postdata 0x0A
+    Returns: Nothing
+    Creates an FD with the results of POSTing postdata to url. Remember that since url is a STRING, not a STRINGNL, it is NUL-terminated
