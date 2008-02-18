@@ -7,6 +7,8 @@ from psoxglobals import SAFETYLIST
 
 PSOX_VERSION = (0, 0, 0) #First number specifies major version, next two specify minimum minor version, and current minor version
 
+MY_VERSION = 1
+
 class MyDomain(Domain):
     @argtypes(LNUM, LNUM, FNUM(3)) #[MANDATORY] This specifies what arguments the function will take. Note that the FNUM(3) indicates fixed bytes acting as one number
     @rettypes(LNUM) #[OPTIONAL] Converts the returned Python values into something accepted by PSOX
