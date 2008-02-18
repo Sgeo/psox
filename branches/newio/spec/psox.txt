@@ -1,0 +1,201 @@
+PSOX is strongly inspired by, and designed to be a sort of
+replacement for, PESOIX.. Revision 2
+of http://jonripley.com/easel/ep_specs.txt and
+http://jonripley.com/easel/api.txt
+
+Please note that PSOX, as described here, is in no way whatsoever
+backwards compatible with either PESOIX or EsoAPI 1.0.. if there is
+enough demand, I might eventually try to figure out how to fix that..
+
+This started due to concerns about the semantic meaning of 0x00 0x00
+and due to displeasure about the idea of PESOIX writing directly to
+an esolang's memory..
+
+This is version 0x00 0x00 r20071229 of PSOX..
+
+Terminology: 
+PSOX Client:
+    an app written in a (presumably) esoteric language that takes advantage of PSOX features.
+    
+PSOX Server:
+    Provides PSOX features and can be implemented as either part of the client's interpreter, or as a layer between real stdin/stdout and the interpreter (preferred).
+    
+Domain:
+    Takes place of PESOIX's dialects, and represents what in other languages
+might be called a library, e.g. File I/O or Direct sockets or HTTP.
+A builtin domain is a domain that is either built directly into the
+PSOX spec, or referred to from the PSOX spec as such. A custom
+domain does not need to be referred to by the PSOX spec. This
+allows people to make their own domains without worrying about
+registering anything, as in Funge-98
+
+PRI:
+    A PSOX Resource Identifier. Can either be a valid URI, or a string registered on http://esolangs.org/wiki/PSOX/PRI
+    Can never start with a number
+
+
+File descriptors:
+A file descriptor is a number between 2 and 255, inclusive. File descriptors let
+the app change the meaning of stdin and stdout. Example:
+0x00 0x02 0x10 f 0x0A is Change Stdout
+0x00 0x02 0x11 f 0x0A is Change Stdin
+If there is a file descriptor 0x04 I want to read input from:
+0x00 0x02 0x11 0x04 0x0A
+from there, future input requests or whatever will read from descriptor 0x04
+0x02 is normal stdout, and 0x03 is normal stdin. 0x00 refers to the file descriptor serving as current outfile descriptor, and 0x01 refers to the file descriptor serving as current infile descriptor.
+
+New file descriptors are always opened on the smallest number available.
+
+When a file descriptor is created, it can be either an infile descriptor, outfile descriptor, or dualfile descriptor Dualfile just means that you can both read from it and write to it. In any case, it occupies one slot so this is possible:
+
+0x00 (current outfile descriptor)
+0x01 (current infile descriptor)
+0x02 (standard output)
+0x03 (standard input)
+0x04 (some infile)
+0x05 (some dualfile)
+0x06 (some outfile)
+
+
+A function f in domain d is called with:
+0x00 d f 0x0A
+
+
+Types:
+All functions that accept arguments can only accept them in the form of one of the PSOX types. The types are elaborated on at psox-types.txt
+
+PSOX-Init will be: 0x00 0x07 which is then followed by versioning
+information
+The client will send versioning information as follows:
+MAJOR_VER 0x0A MIN_MINOR_VER MY_MINOR_VER 0x0A
+MAJOR_VER must be the same on both the client and server, although
+server may implement multiple major versions. MIN_MINOR_VER is the
+minimum minor version that the client will run on, and
+MY_MINOR_VER is the client's actual minor version
+The server first responds right after the 0x0A after the MAJOR_VER is sent from
+the client:
+
+0x00 - SUCCESS
+0x01 - DIFFERENT_MAJOR_VER
+If successful, the client then sends the minorver information as
+specified above. The server then responds:
+0x00 - SUCCESS
+0x01 - SERVER_MINOR_VER < MIN_MINOR_VER
+0x02 - MY_MINOR_VER < LOWEST_SUPPORTED_MINOR_VER [on the Server]
+
+After that, the server responds with the minorver running (the highest minorver compatible with both server and client)
+
+Once this is done, the app can run normally.. To
+output 0x00, 0x00 0x00 0x00 must be used. `0x00 0x00 a` safely prints a.
+To use something in PSOX, it must be escaped with 0x00
+After the function and all arguments are given, 0x0A must be sent by
+the client, with the exception of the function 0x00 0x00
+
+
+
+Domains:
+Domains are roughly analogous to PESOIX's dialects. However,
+instead of specifing a general API, they are more like a library.
+One domain might provide functions for printing numbers, and
+another might provide networking capability. All domains must
+either have a longname, or a shortname, or both. The long-name
+is a PRI, so that people may, if they want,
+use their own custom domain, as long as they can give it a
+unique longname. The shortname is a number. Even shortnames
+are for domains specified in this spec, or referred directly
+from this spec. Odd shortnames are for custom domains, the
+domain does not specify a particular odd shortname. The
+longname of the domain is mapped by the command
+0x00 0x02 0x03 0x## 0x0A to a specified odd shortname.
+Custom domains cannot be used by the client until mapped.
+
+A domain that is, for example, originally a custom domain, but
+becomes part of the official PSOX spec, may have both a longname
+and an even shortname. Modifications might be added to the
+longname version, but don't take effect if the domain is used
+through the even shortname. The longname version and the even
+shortname version could be taken to be slightly different domains.
+
+To map a longname (e.g. "http://example.com/longname") to
+an odd shortname (e.g. 0x03):
+0x00 0x02 0x03 "http://example.com/longname" 0x0A
+The string is a null-terminated string. Note
+also that the string simply has to be unique, not necessarily
+refer to a real object. However, it is strongly preferred
+to use it like an XML namespace, i.e. have it point to
+a space that you own.. It can also point to a page on the
+http://esolangs.org wiki..
+If an attempt is made to map a longname onto an occupied shortname, the old shortname
+will be replaced (ONLY if the shortname is odd and greater than 1, of course)
+
+If there is an attempt to map a non-implemented
+longname, the shortname remains available.
+
+Pseudodomains:
+0x00 0x00 a
+    Safely print a
+0x00 0x01 num 0x0A
+    Requests input from the current infile descriptor. num is the number of bytes to read
+    in, or 0x00 to read until the next newline.
+    If set number of chars, returns:
+        eof_status num_of_chars_not_eof successful_bytes padding_NULs
+        EOF status is 0x01 if there was no EOF encountered, 0x00 if there was an EOF
+        num_of_chars_not_eof is the number of characters successfully retrieved
+        padding_NULS is a number of 0x00 such that the number of successful_bytes + number of padding_NULs = number of requested bytes
+    If read until next newline:
+        eof_status bytes 0x00
+        if there was no EOF, then bytes will naturally include 0x0A
+        if there was an EOF, a 0x0A will be added to bytes
+        A complimentary 0x00 is added in order to aide processing in certain languages.
+PSOX-System domain:
+Commands in the PSOX-System domain:
+
+0x00 0x02 0x01 0x## 0x0A
+    Exit with status code ##
+0x00 0x02 0x02 0x## 0x0A
+    Domain installation check: Check that domain ## is installed.
+    Returns the version of the domain if it is installed, or 0 otherwise. Note that no domain can have a version number 0.
+0x00 0x02 0x03 0x## somestring 0x0A
+    Attempt to map somestring to domain ##. Only for odd ## > 1..
+    returns 1 byte indicating the domain's version, or 0 if the PRI was not installed as a domain. Remember, somestring is not a NUL-terminated string, it just doens't contain a 0x0A
+0x00 0x02 0x04 0x0A
+    Retrieve NUL-terminated string with the effective command
+    line (PSOX server excludes itself from the string. In the PSOX.py implementation, specified on the commandline with `-c "whatever"`)
+0x00 0x02 0x06 somestring  0x0A
+    Determine if the safety option somestring was specified at the prompt. In the PSOX.py implementation, safety options are specified after an "-s" option, and are separated by commas e.g. "PSOX.py -s fullfileio,nohttp"
+0x00 0x02 0x08 0x0A
+    Returns NUL-terminated string with the server's
+    Handprint. This concept is stolen from Funge-98,
+    and identifies the server with a PRI.
+    
+File descriptor manipulation (in PSOX System Domain):
+    
+0x00 0x02 0x10 f 0x0A
+    Switch outfile descriptor to file descriptor f. Undefined if f is not 
+    a valid outfile descriptor.
+0x00 0x02 0x11 f 0x0A
+    Switch infile descriptor to file descriptor f. Undefined if f is not
+    a valid infile descriptor.
+0x00 0x02 0x12 f L 0x0A
+    Absolute seek through file descriptor f to location L,
+    where L is a longnum. Numbering starts at 0, and causes the NEXT 
+    written or read-from character to be at the saught-to position.
+    Negative numbers are considered to be the length of the file (if applicable) + 
+    the number.
+0x00 0x02 0x13 f L 0x0A
+    Relative seek through file descriptor f by L.
+0x00 0x02 0x14 f 0x0A
+    Flush file descriptor f.
+0x00 0x02 0x15 f 0x0A
+    Close file descriptor f.
+0x00 0x02 0x16 0x0A
+    Close and delete file descriptor f, and change either the current infile or outfile descriptors, or both, to stdio (0x02 for outfile, 0x03 for infile) if necessary.
+    
+
+List of Builtin Domains
+=======================
+0x00 Pseudodomain-Safe-Print-Output
+0x01 Pseudodomain-Input
+0x02 PSOX-System
+0x04 Simple Utilities:
+http://sgeo.diagonalfish.net/esoteric/psox-utils.txt

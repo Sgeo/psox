@@ -1,0 +1,68 @@
+0x00 0x04 0x00 FNUM(1)/base STRINGNL/str 0x0A
+    Returns: FNUM(1)
+    Takes a string and turns it into a single-byte number, e.g. from user-input to something usable
+    
+0x00 0x04 0x01 FNUM(1)/base STRINGNL/str 0x0A
+    Returns: LNUM
+    Same as above, except returning an LNUM
+    
+0x00 0x04 0x02 FNUM(1)/base FNUM(1)/num 0x0A
+    Returns: STRING
+    Turns num into a user-readable string (currently only works for bases 8, 10, and 16)
+    
+0x00 0x04 0x03 FNUM(1)/base LNUM/num 0x0A
+    Returns: STRING
+    Same as above except for LNUMs
+    
+    
+0x00 0x04 0x04 FNUM(1)/byte 0x0A
+    Returns: FNUM(1)
+    Boolean NOT
+    
+0x00 0x04 0x05 FNUM(1)/byte 0x0A
+    Returns: FNUM(1)
+    Bitwise NOT
+    
+0x00 0x04 0x06 FNUM(1)/b1 FNUM(1)/b2 0x0A
+    Returns: FNUM(1)
+    Bitwise AND
+    
+0x00 0x04 0x07 FNUM(1)/b1 FNUM(1)/b2 0x0A
+    Returns: FNUM(1)
+    Bitwise OR
+       
+0x00 0x04 0x08 FNUM(1)/b1 FNUM(1)/b2 0x0A
+    Returns: FNUM(1)
+    Bitwise XOR
+    
+0x00 0x04 0x09 FNUM(1)/n1 FNUM(1)/n2 0x0A
+    Returns: FNUM(1)
+    n1+n2
+
+0x00 0x04 0x0A LNUM/n1 LNUM/n2 0x0A
+    Returns: LNUM
+    n1+n2
+    
+0x00 0x04 0x0B FNUM(1)/n1 FNUM(1)/n2 0x0A
+    Returns: FNUM(1)
+    n1-n2
+
+0x00 0x04 0x0C LNUM/n1 LNUM/n2 0x0A
+    Returns: LNUM
+    n1-n2
+    
+0x00 0x04 0x0D FNUM(1)/n1 FNUM(1)/n2 0x0A
+    Returns: FNUM(1)
+    n1*n2
+
+0x00 0x04 0x0E LNUM/n1 LNUM/n2 0x0A
+    Returns: LNUM
+    n1*n2
+    
+0x00 0x04 0x0F FNUM(1)/n1 FNUM(1)/n2 0x0A
+    Returns: FNUM(1)
+    n1/n2
+
+0x00 0x04 0x10 LNUM/n1 LNUM/n2 0x0A
+    Returns: LNUM
+    n1/n2

@@ -1,0 +1,57 @@
+All arguments to functions must be a PSOX type. Functions may return whatever they like, however.
+
+There are 8 different PSOX types that a PSOX function may accept:
+FNUM
+FBYTES
+STRING
+STRINGNL
+LNUM
+LBYTES
+VARG
+REGEX
+
+Physically, FNUM and FBYTES are identical, and LNUM and LBYTES are identical.
+
+LNUM, LBYTES, and TDATA are best avoided when not needed.
+
+FNUM:
+    Simply a fixed number of bytes that represent one number, e.g. 01h 00h would represent 256.
+FBYTES:
+    A fixed number of bytes that represent arbitrary bytes.
+STRING:
+    A simple null-terminated C-style string
+STRINGNL:
+    A string that contains no newlines. This is mostly useful as the last data item that a function will accept.
+LNUM:
+    An arbitrary length integer.
+    The format goes like this: (indicator) (data) (indicator) (data) (indicator) etc. An indicator of 0x01 means that data follows. An indicator of 0x02 is only allowed at the beginning of the LNUM, and indicate that the number is negative. An indicator of 0x00 means that the LNUM is over.
+
+LBYTES:
+    An arbitrary number of bytes that may contain a NUL. The format is identical to LNUM, and an indicator of 0x02 is processed as 0x01 if it is the first indicator.
+    
+VARG:
+    An arbitrary number of an arbitrary PSOX type. Physically, it is represented like an LNUM/LBYTES, except w/o the 0x02 indicator.
+    For example, a VARG(STRING) might look like:
+        0x01 "hello!" 0x01 "world!" 0x00
+        Where of course "hello!" and "world!" are STRINGs..
+        
+REGEX:
+    An arbitrary sequence of bytes that match a regex. The regex MUST have EXACTLY one matching group. An example is REGEX(r"(.{3})"), which incidentally is equivelent to FBYTES.
+    Note that in the reference implementation, REGEX is called with two arguments, the second being an interpreter that takes the matched string and returns an interpreted value
+    
+    
+Regexes:
+    All PSOX types are represented as regexes with ONE matching group. Here are the regexes for each type.
+    FNUM(n)/FBYTES(n):
+        r"(.{n})"
+    STRING:
+        r"([^\x00]*?\x00)"
+    LONGNUM/LONGBYTES:
+        r"((?:\x02.)?(?:\x01.)*?\x00)"
+    VARG:
+        This varies depending on the type.. Construction (note that the () for matching groups within some_type_regex are modified to be non-retrievable w/ "?:"):
+        VARG(some_type_regex):
+            r"((?:\x01" + some_type_regex + r")*?\x00)"
+    
+    REGEX(some_regex):
+        some_regex
