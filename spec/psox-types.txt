@@ -12,7 +12,7 @@ REGEX
 
 Physically, FNUM and FBYTES are identical, and LNUM and LBYTES are identical.
 
-LNUM, LBYTES, and TDATA are best avoided when not needed.
+LNUM and LBYTES are best avoided when not needed.
 
 FNUM:
     Simply a fixed number of bytes that represent one number, e.g. 01h 00h would represent 256.
