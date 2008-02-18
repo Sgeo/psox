@@ -9,8 +9,8 @@
     Makes a server socket. Server sockets start at 0x00 and are added at the lowest available number. Closing a server socket relinquishes that number and the other sockets stay at the same point. Backlog specifies how many connections can be queued up. Should be at least 1 and the maximum might be ~5. Addr may be blank(omitted) to bind to the localhost.
     
 0x00 0x08 0x02 FNUM(1)/serversocket 0x0A
-    Returns: Nothing
-    Accepts 1 connection on serversocket, making an FD
+    Returns: STRING/addr
+    Accepts 1 connection on serversocket, making an FD, and returning the address of the connecting socket. (Remember that STRINGs are NUL-terminated)
     
 0x00 0x08 0x03 FNUM(1)/serversocket 0x0A
     Returns: Nothing
