@@ -25,17 +25,11 @@ REGEX1 = re.compile(r"((?:[^\x00]|\x00{2}(?:.|\Z))*)(\x00.*)?\Z", re.S)
 REGEX2 = re.compile(r"\x00\x00(.)", re.S)
 
 parser = OptionParser(usage="%prog [-s safety1,safety2] [-c \"fakecommandline\"] command", version="PSOX " + vn2vs(PSOX_MAJOR_VER, PSOX_MINOR_VER_RANGE) + " - %prog 0.0")
-parser.add_option("-s", "--safety", dest="safety", help="Specifies safety options. e.g to allow full access to the filesystem, and no Internet access, use \"-s fullfileio,nonet\"")
 parser.add_option("-c", "--command-line", dest="cline", help="Specifies the virtual command line for the client")
 parser.add_option("-i", "--see-internals", action="store_true", dest="internal", help="Watch some of the inner workings of the PSOX Server")
 
 options, args = parser.parse_args()
 
-if(options.safety is not None):
-    G.SAFETYLIST = options.safety.split(",")
-else:
-    G.SAFETYLIST = []
-    
 G.CLINE = options.cline
 
 if(options.internal): G.SEEINTERNAL = True

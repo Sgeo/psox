@@ -4,11 +4,6 @@ import psoxglobals as G
 from fd import FdWrapper
 import urllib2 as url
 
-if "nonet" in G.SAFETYLIST or "nohttp" in G.SAFETYLIST:
-    MY_VERSION = 0
-else:
-    MY_VERSION = 1
-    
 class HTTPDomain(Domain):
     
     @argtypes(STRINGNL)
