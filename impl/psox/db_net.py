@@ -3,6 +3,7 @@ from psoxtypes import FNUM, STRING, STRINGNL
 import psoxglobals as G
 from fd import FdDict, PSOXFd, FdWrapper #FdDict is used for storing the server sockets
 import urllib2 as url
+import socket
 
 ServerSockets = FdDict()
 
