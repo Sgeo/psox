@@ -66,3 +66,7 @@
 0x00 0x04 0x10 LNUM/n1 LNUM/n2 0x0A
     Returns: LNUM
     n1/n2
+    
+0x00 0x04 0x11 FBYTES(1)/b 0x0A
+    Returns: FBYTES(1)
+    Loopback, returning b
