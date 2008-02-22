@@ -33,6 +33,9 @@ class FNUM(PSOXType):
         return unpack(stuff)
         
         
+FNUM1 = FNUM(1)
+        
+        
 class FBYTES(PSOXType):
     def __init__(self, size):
         self.size = size

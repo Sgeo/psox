@@ -1,5 +1,5 @@
 from domain import Domain, argtypes, rettypes
-from psoxtypes import STRING, STRINGNL, LBYTES, LNUM, FNUM, VARG, FBYTES
+from psoxtypes import STRING, STRINGNL, LBYTES, LNUM, FNUM, FNUM1, VARG, FBYTES
 import psoxglobals as G
 
 MY_VERSION = 1
@@ -12,22 +12,22 @@ class SysDomain(Domain):
         """Just an example function, not spec"""
         return str(num)
     
-    @argtypes(FNUM(1))
+    @argtypes(FNUM1)
     @rettypes()
     def f01(self, status):
         from sys import exit
         exit(status)
         
-    @argtypes(FNUM(1))
-    @rettypes(FNUM(1))
+    @argtypes(FNUM1)
+    @rettypes(FNUM1)
     def f02(self, domnum):
         if(domnum in G.DOMDICT):
             return G.DOMDICT[domnum](0)
         else:
             return 0
             
-    @argtypes(FNUM(1), STRINGNL)
-    @rettypes(FNUM(1))
+    @argtypes(FNUM1, STRINGNL)
+    @rettypes(FNUM1)
     def f03(self, domnum, pri):
         if pri not in G.CDOMDICT:
             return 0
@@ -44,7 +44,7 @@ class SysDomain(Domain):
         return G.CLINE
         
 #    @argtypes(STRINGNL)
-#    @rettypes(FNUM(1))
+#    @rettypes(FNUM1)
 #    def f06(self, somestring):
 #        return int(somestring in G.SAFETYLIST)
         
@@ -53,37 +53,37 @@ class SysDomain(Domain):
     def f08(self):
         return "pri:PSOX.py"
         
-    @argtypes(FNUM(1))
+    @argtypes(FNUM1)
     @rettypes()
     def f10(self, some_fd):
         G.FDDICT[0] = G.FDDICT[some_fd]
         
-    @argtypes(FNUM(1))
+    @argtypes(FNUM1)
     @rettypes()
     def f11(self, some_fd):
         G.FDDICT[1] = G.FDDICT[some_fd]
         
-    @argtypes(FNUM(1), LNUM)
+    @argtypes(FNUM1, LNUM)
     @rettypes()
     def f12(self, some_fd, seek):
         G.FDDICT[some_fd].absseek(seek)
         
-    @argtypes(FNUM(1), LNUM)
+    @argtypes(FNUM1, LNUM)
     @rettypes()
     def f13(self, some_fd, seek):
         G.FDDICT[some_fd].relseek(seek)
         
-    @argtypes(FNUM(1))
+    @argtypes(FNUM1)
     @rettypes()
     def f14(self, some_fd):
         G.FDDICT[some_fd].flush()
         
-    @argtypes(FNUM(1))
+    @argtypes(FNUM1)
     @rettypes()
     def f15(self, some_fd):
         G.FDDICT[some_fd].close()
         
-    @argtypes(FNUM(1))
+    @argtypes(FNUM1)
     @rettypes()
     def f15(self, some_fd):
         the_fd = G.FDDICT[some_fd]
