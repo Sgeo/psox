@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from psox import psoxglobals as G
 
 G.SEEINTERNAL = False
@@ -16,7 +18,7 @@ from subprocess import Popen, PIPE
 import sys
 from psox.errors import IllegalPSOXError, UnsupportedVersionError
 from psox.utils import getlinesuntil, linelen, vn2vs, linelen_atleast
-from os.path import normcase
+from os.path import normcase, dirname
 
 import psox.fd
 
@@ -52,7 +54,12 @@ def send(msg):
         
         
 domaincfg = ConfigParser()
-domaincfg.readfp(open(normcase("psox/domains.txt")))
+the_dirname = dirname(__file__)
+if the_dirname:
+    the_dirdom = the_dirname + "/"
+else:
+    the_dirdom = ""
+domaincfg.readfp(open(the_dirdom + normcase("psox/domains.txt")))
 G.DOMDICT = {}
 for (i, j) in domaincfg.items("Builtin"):
     the_domain = __import__("psox."+j)
