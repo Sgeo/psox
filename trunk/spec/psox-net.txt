@@ -1,25 +1,31 @@
 0x00 0x08 0x00 FNUM(1)/type FNUM(2)/port STRINGNL/addr 0x0A
-    Returns: Nothing
+    Returns: FNUM(1)/success
     Creates an FD that can be read from/written to.
     Type is 0x00 for TCP, 0x01 for UDP
     Port and addr should be obvious
+    Returns 0x00 on error, 0x01 otherwise
+    No FD is made on error
     
 0x00 0x08 0x01 FNUM(1)/backlog FNUM(1)/type FNUM(2)/port STRINGNL/addr 0x0A
-    Returns: Nothing
-    Makes a server socket. Server sockets start at 0x00 and are added at the lowest available number. Closing a server socket relinquishes that number and the other sockets stay at the same point. Backlog specifies how many connections can be queued up. Should be at least 1 and the maximum might be ~5. Addr may be blank(omitted) to bind to the localhost.
+    Returns: FNUM(1)/success
+    Makes a server socket. Server sockets start at 0x00 and are added at the lowest available number. Closing a server socket relinquishes that number and the other sockets stay at the same point. Backlog specifies how many connections can be queued up. Should be at least 1 and the maximum might be ~5. Addr may be blank(omitted) to bind to the localhost. Returns 0x00 if there was an error, 0x01 otherwise. If there is an error, no server socket is made.
     
-0x00 0x08 0x02 FNUM(1)/serversocket 0x0A
-    Returns: STRING/addr
-    Accepts 1 connection on serversocket, making an FD, and returning the address of the connecting socket. (Remember that STRINGs are NUL-terminated)
+0x00 0x08 0x02 FNUM(1)/blocking FNUM(1)/serversocket 0x0A
+    Returns: FNUM(1)/ready STRING/addr
+    If blocking is not 0x00, waits for a connection on serversocket, returning 0x01 and the addr of the connecting socket once there is a connection (if there is no error). If blocking is 0x00, checks to see if there is a connection waiting, and if there isn't, returns 0x00 and an empty STRING (0x00). Otherwise, returns 0x01 and the addr of the connecting socket.
     
-0x00 0x08 0x03 FNUM(1)/serversocket 0x0A
+0x00 0x08 0x03 FNUM(1)/fd 0x0A
+    Returns: FNUM(1)/live
+    Returns 0x01 if fd is a live socket, 0x00 if the socket is not live. Undefined if fd is not a socket
+    
+0x00 0x08 0x04 FNUM(1)/serversocket 0x0A
     Returns: Nothing
     Closes serversocket
     
-0x00 0x08 0x04 STRINGNL/url 0x0A
+0x00 0x08 0x05 STRINGNL/url 0x0A
     Returns: Nothing
     Creates an FD with the data returned from getting the URL
     
-0x00 0x08 0x05 STRING/url STRINGNL/postdata 0x0A
+0x00 0x08 0x06 STRING/url STRINGNL/postdata 0x0A
     Returns: Nothing
     Creates an FD with the results of POSTing postdata to url. Remember that since url is a STRING, not a STRINGNL, it is NUL-terminated

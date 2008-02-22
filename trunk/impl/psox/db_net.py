@@ -24,57 +24,82 @@ class FdSocketWrapper(PSOXFd):
             return the_bytes
     def close(self):
         self.socket.close()
+    def is_socket_live(self):
+        try:
+            self.write("")
+            return True
+        except socket.error:
+            return False
 
 MY_VERSION = 1
 
 class NetDomain(Domain):
     
     @argtypes(FNUM(1), FNUM(2), STRINGNL)
-    @rettypes()
+    @rettypes(FNUM(1))
     def f00(self, tcp_or_udp, port, addr):
         if tcp_or_udp:
             SOCK = socket.SOCK_DGRAM
         else:
             SOCK = socket.SOCK_STREAM
         
-        s = socket.socket(socket.AF_INET, SOCK)
-        s.connect((addr, port))
-        G.FDDICT.append(FdSocketWrapper(s))
+        try:
+            s = socket.socket(socket.AF_INET, SOCK)
+            s.connect((addr, port))
+            G.FDDICT.append(FdSocketWrapper(s))
+            return 1
+        except socket.error:
+            return 0
         
     @argtypes(FNUM(1), FNUM(1), FNUM(2), STRINGNL)
-    @rettypes()
+    @rettypes(FNUM(1))
     def f01(self, backlog, tcp_or_udp, port, addr):
         if tcp_or_udp:
             SOCK = socket.SOCK_DGRAM
         else:
             SOCK = socket.SOCK_STREAM
             
-        s = socket.socket(socket.AF_INET, SOCK)
-        s.bind((addr, port))
-        s.listen(backlog)
-        ServerSockets.append(s)
+        try:
+            s = socket.socket(socket.AF_INET, SOCK)
+            s.bind((addr, port))
+            s.listen(backlog)
+            ServerSockets.append(s)
+            return 1
+        except socket.error:
+            return 0
         
-    @argtypes(FNUM(1))
-    @rettypes(STRING)
-    def f02(self, the_serversocket):
+    @argtypes(FNUM(1), FNUM(1))
+    @rettypes(FNUM(1), STRING)
+    def f02(self, blocking, the_serversocket):
         s = ServerSockets[the_serversocket]
-        conn, addr = s.accept()
-        G.FDDICT.append(conn)
-        return addr
+        s.setblocking(blocking)
+        try:
+            conn, addr = s.accept()
+            conn.setblocking(1)
+            G.FDDICT.append(conn)
+            return 1, addr
+        except socket.error:
+            return 0, ""
+            
+    @argtypes(FNUM(1))
+    @rettypes(FNUM(1))
+    def f03(self, socket_fd):
+        the_socket = G.FDDICT[socket_fd]
+        return int(the_socket.is_socket_live())
         
     @argtypes(FNUM(1))
     @rettypes()
-    def f03(self, the_serversocket):
+    def f04(self, the_serversocket):
         del ServerSockets[the_serversocket]
         
     @argtypes(STRINGNL)
     @rettypes()
-    def f04(self, the_url):
+    def f05(self, the_url):
         G.FDDICT.append(url.urlopen(the_url))
         
     @argtypes(STRING, STRINGNL)
     @rettypes()
-    def f05(self, the_url, postdata):
+    def f06(self, the_url, postdata):
         G.FDDICT.append(url.urlopen(the_url, postdata))
         
         
