@@ -44,3 +44,4 @@ Note that all paths use "/" regardless of whether it's on Windows or Linux
     Returns: FNUM(1)/success
     DELETES entityname
     recursive only applies to directories, it won't make a difference when deleting a file
+    Undefined if recursive is 0x00, you are deleting a directory, and it isn't empty
