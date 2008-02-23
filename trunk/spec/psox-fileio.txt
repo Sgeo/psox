@@ -1,0 +1,46 @@
+Note that all paths use "/" regardless of whether it's on Windows or Linux
+
+0x00 0x06 0x00 FNUM(1)/rwa FNUM(1)/updating FNUM(1)/binary STRINGNL/filename 0x0A
+    Returns: FNUM(1)/success
+    Opens a file
+    rwa is 0x00 for mode r[eading]
+           0x01 for mode w[riting]
+           0x02 for mode a[ppending]
+    updating puts a "+" after the mode if 0x01, and not if it's 0x00
+    If binary is 0x00, the file will be opened in text mode, or binary mode otherwise
+    
+0x00 0x06 0x01 FNUM(1)/cd STRINGNL/dirname 0x0A
+    Returns: FNUM(1)/success
+    Makes directory dirname if it doesn't exist (if it does, it's harmless)
+    If cd is not 0x00, changes current directory to that directory regardless of whether or not it existed beforehand
+    success is 0x01 if there was no error (the directory existing does not count as an error), 0x00 otherwise
+    
+0x00 0x06 0x02 STRINGNL/entityname 0x0A
+    Returns: FNUM(1)/exists
+    Checks to see if entityname exists, and what type it is.
+    If it is a file, returns 0x01
+    If it is a directory, returns 0x02
+    If it does not exist, returns 0x00
+    
+0x00 0x06 0x03 STRINGNL/entityname 0x0A
+    Returns: FNUM(1)/read FNUM(1)/write FNUM(1)/execute
+    Checks permissions on entityname
+    If entityname does not exist, all permissions are returned as 0x00
+    
+0x00 0x06 0x04 0x0A
+    Returns: STRING/path
+    Returns the current working directory
+    
+0x00 0x06 0x05 FNUM(1)/all [STRINGNL/path] 0x0A
+    Listing of [all] files and directories in path
+    If path is ommitted, the current working directory is used.
+    all indicates whether or not hidden files are included
+    Each entry is in this form:
+        TYPEINDICATOR name 0x0A
+    where TYPEINDICATOR is 0x01 for files, 0x02 for directories
+    The whole thing is terminated with a 0x00
+
+0x00 0x06 0x06 FNUM(1)/recursive STRINGNL/entityname 0x0A
+    Returns: FNUM(1)/success
+    DELETES entityname
+    recursive only applies to directories, it won't make a difference when deleting a file
