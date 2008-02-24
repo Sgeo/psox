@@ -150,6 +150,10 @@ Pseudodomains:
 PSOX-System domain:
 Commands in the PSOX-System domain:
 
+0x00 0x02 0x00 ??? 0x0A
+    Returns: Who the hell knows?
+    Undefined; Happy happy fun fun Easter Egg!
+
 0x00 0x02 0x01 0x## 0x0A
     Exit with status code ##
 0x00 0x02 0x02 0x## 0x0A
