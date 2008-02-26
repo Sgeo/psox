@@ -127,7 +127,7 @@ class MyDomain(Domain):
         
     @argtypes(FBYTES(1))
     @rettypes(FBYTES(1))
-    def f11(self, b):
+    def f13(self, b):
         return b
         
 the_domain = MyDomain
