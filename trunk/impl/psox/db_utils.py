@@ -115,6 +115,16 @@ class MyDomain(Domain):
     def f10(self, n1, n2):
         return n1 / n2
         
+    @argtypes(FNUM1, FNUM1)
+    @rettypes(FNUM1)
+    def f11(self, n1, n2):
+        return n1 % n2
+    
+    @argtypes(LNUM, LNUM)
+    @rettypes(LNUM)
+    def f12(self, n1, n2):
+        return n1 % n2
+        
     @argtypes(FBYTES(1))
     @rettypes(FBYTES(1))
     def f11(self, b):
