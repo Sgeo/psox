@@ -15,7 +15,7 @@ class MyDomain(Domain):
         sleep(2)
         print "M O U S E!"
         sleep(2)
-        print "No wait!
+        print "No wait!"
         print "I was not thinking of Mickey Mouse! I hate Mickey Mouse!"
         print "No wait, I mean I never heard of Mickey Mouse! Who's this Mickey Mouse?"
         print "***watches a black helicopter arrive at his house***"
